@@ -57,5 +57,17 @@ pipeline
                 sh 'docker rmi mithuntechnologies/login-service:${buildNumber}'
             }
         }
+
+        stage('Deploy Application to Deployment Server')
+        {
+            steps()
+            {
+                sshagent(['DeploymentServer_SSH'])
+                {
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.12.147 docker rm -f maven-container || true"
+                     sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.12.147 docker run -d --name maven-container -p 8080:8080 mithuntechnologies/login-service:${buildNumber}"
+                }
+            }
+        }
     }
 }
