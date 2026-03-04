@@ -54,5 +54,13 @@ pipeline
                 sh 'docker rmi -f 149536451818.dkr.ecr.ap-south-1.amazonaws.com/maven-web-application:${buildNumber}'
             }
         }
+
+        stage('Update Image Tag in Kubernetes Manifest')
+        {
+            steps()
+            {
+                sh "sed -i 's/Build_Tag/${buildNumber}/g' MavenWebApplication.yaml"
+            }
+        }
     }
 }
